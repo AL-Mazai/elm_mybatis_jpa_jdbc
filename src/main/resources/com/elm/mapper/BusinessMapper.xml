@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.elm.mapper.BusinessMapper">
+    <insert id="saveBusiness" parameterType="com.elm.pojo.Business" useGeneratedKeys="true" keyProperty="businessId">
+        insert into business
+        # prefix="("，表示在SQL最前面加左括号，suffix=")"，表示在SQL最后面加左括号
+        # prefixOverrides=","表示去掉第一个逗号，suffixOverrides=","表示去掉最后一个逗号
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="businessName != null">
+                businessName,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="businessAddress != null">
+                businessAddress,
+            </if>
+            <if test="businessExplain != null">
+                businessExplain,
+            </if>
+            <if test="starPrice != null">
+                starPrice,
+            </if>
+            <if test="deliveryPrice != null">
+                deliveryPrice,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="businessName != null">
+                #{businessName},
+            </if>
+            <if test="password != null">
+                #{password},
+            </if>
+            <if test="businessAddress != null">
+               #{businessAddress},
+            </if>
+            <if test="businessExplain != null">
+                #{businessExplain},
+            </if>
+            <if test="starPrice != null">
+                #{starPrice},
+            </if>
+            <if test="deliveryPrice != null">
+                #{deliveryPrice},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateBusiness" parameterType="com.elm.pojo.Business">
+        update business
+        <trim prefix="set" suffixOverrides=",">
+            <if test="businessName != null">
+                businessName = #{businessName},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="businessAddress != null">
+                businessAddress = #{businessAddress},
+            </if>
+            <if test="businessExplain != null">
+                businessExplain = #{businessExplain},
+            </if>
+            <if test="starPrice != null">
+                starPrice = #{starPrice},
+            </if>
+            <if test="deliveryPrice != null">
+                deliveryPrice = #{deliveryPrice},
+            </if>
+            <if test="businessId != null">
+                businessId = #{businessId},
+            </if>
+        </trim>
+        where businessId = #{businessId}
+    </update>
+
+    <update id="updateBusinessPasswordById">
+        update business set password = #{password}
+        where businessId = #{businessId}
+    </update>
+
+    <delete id="removeBusiness">
+        delete from business
+        where businessId = #{businessId}
+    </delete>
+
+    <select id="getBusinessById" resultType="com.elm.pojo.Business">
+        select *
+        from business
+        where businessId = #{businessId}
+    </select>
+
+    <select id="getBusinessList" resultType="com.elm.pojo.Business">
+        select * from business
+        where 1 = 1
+        <if test="businessName != null">
+            and businessName like concat('%', #{businessName}, '%')
+        </if>
+        <if test="businessAddress != null">
+            and businessAddress like concat('%', #{businessAddress}, '%')
+        </if>
+    </select>
+
+    <select id="getBusinessByIdAndByPassword" resultType="com.elm.pojo.Business">
+        select * from business
+        where businessId = #{businessId} and password = #{password}
+    </select>
+</mapper>
